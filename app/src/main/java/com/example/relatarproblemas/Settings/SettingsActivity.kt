@@ -1,11 +1,12 @@
-package com.example.relatarproblemas
+package com.example.relatarproblemas.Settings
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.relatarproblemas.R
 
-class MainActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_settings)
     }
 }
