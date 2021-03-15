@@ -1,4 +1,4 @@
-package com.example.relatarproblemas.Settings
+    package com.example.relatarproblemas.Settings
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

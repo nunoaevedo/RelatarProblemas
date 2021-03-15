@@ -6,4 +6,12 @@
     <string name="entrar">Entrar</string>
     <string name="ver_notas">Ver notas</string>
     <string name="bem_vindo">Bem Vindo!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_action">Add Action</string>
+    <string name="save">Save</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="ONE">1</string>
+    <string name="delete">Delete</string>
 </resources>
