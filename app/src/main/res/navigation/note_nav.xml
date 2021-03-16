@@ -12,10 +12,12 @@
         tools:layout="@layout/fragment_list_notes" >
         <action
             android:id="@+id/action_listNotesFragment_to_addNotesFragment"
-            app:destination="@id/addNotesFragment" />
+            app:destination="@id/addNotesFragment"
+            app:popUpTo="@id/listNotesFragment" />
         <action
             android:id="@+id/action_listNotesFragment_to_updateNotesFragment"
-            app:destination="@id/updateNotesFragment" />
+            app:destination="@id/updateNotesFragment"
+            app:popUpTo="@id/listNotesFragment" />
     </fragment>
     <fragment
         android:id="@+id/addNotesFragment"
@@ -31,9 +33,6 @@
         android:name="com.example.relatarproblemas.Notes.UpdateNotesFragment"
         android:label="Update Note"
         tools:layout="@layout/fragment_update_notes" >
-        <action
-            android:id="@+id/action_updateNotesFragment_to_listNotesFragment"
-            app:destination="@id/listNotesFragment" />
         <argument
             android:name="currentNote"
             app:argType="com.example.relatarproblemas.Notes.Model.Note" />

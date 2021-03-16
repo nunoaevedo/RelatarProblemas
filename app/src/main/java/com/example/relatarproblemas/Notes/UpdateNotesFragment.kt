@@ -37,6 +37,8 @@ class UpdateNotesFragment : Fragment() {
             updateItem()
         }
 
+        
+
         //Add menu
         setHasOptionsMenu(true)
 
@@ -54,8 +56,7 @@ class UpdateNotesFragment : Fragment() {
             mNoteViewModel.updateNote(updatedNote)
             Toast.makeText(requireContext(), "Updated Successfully!", Toast.LENGTH_SHORT).show()
             //Navigate Back
-            findNavController().navigate(R.id.action_updateNotesFragment_to_listNotesFragment)
-
+            findNavController().popBackStack()
         }
         else{
             Toast.makeText(requireContext(), "Please fill out all fields!", Toast.LENGTH_SHORT).show()
@@ -82,11 +83,14 @@ class UpdateNotesFragment : Fragment() {
         builder.setPositiveButton("Yes") {_,_ ->
             mNoteViewModel.deleteNote(args.currentNote)
             Toast.makeText(requireContext(), "Successfully removed ${args.currentNote.title}", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_updateNotesFragment_to_listNotesFragment)
+            findNavController().popBackStack()
         }
         builder.setNegativeButton("No"){ _, _ -> }
         builder.setTitle("Delete ${args.currentNote.title}?")
         builder.setMessage("Are you sure you want to delete ${args.currentNote.title}?")
         builder.create().show()
     }
+
+
+
 }

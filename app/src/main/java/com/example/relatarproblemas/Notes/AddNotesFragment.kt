@@ -49,7 +49,7 @@ class AddNotesFragment : Fragment() {
             mNoteViewModel.addNote(note)
             Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_SHORT).show()
             //Navigate back
-            findNavController().navigate(R.id.action_addNotesFragment_to_listNotesFragment)
+            findNavController().popBackStack()
         }else{
             Toast.makeText(requireContext(), "Please fill out all fields!", Toast.LENGTH_SHORT).show()
         }

@@ -7,7 +7,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.relatarproblemas.Notes.ViewModel.NoteViewModel
 import com.example.relatarproblemas.Notes.Recycler.ListAdapter
@@ -58,6 +60,9 @@ class ListNotesFragment : Fragment() {
         if (item.itemId == R.id.menu_delete){
             deleteAllNotes()
         }
+
+//        return NavigationUI.onNavDestinationSelected(item,requireView().findNavController())
+//                ||super.onOptionsItemSelected(item)
         return super.onOptionsItemSelected(item)
     }
 
