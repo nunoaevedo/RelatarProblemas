@@ -60,21 +60,18 @@ class ListNotesFragment : Fragment() {
         if (item.itemId == R.id.menu_delete){
             deleteAllNotes()
         }
-
-//        return NavigationUI.onNavDestinationSelected(item,requireView().findNavController())
-//                ||super.onOptionsItemSelected(item)
         return super.onOptionsItemSelected(item)
     }
 
     private fun deleteAllNotes() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Yes") {_,_ ->
+        builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
             mNoteViewModel.deleteAllNotes()
-            Toast.makeText(requireContext(), "Successfully removed all notes", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.successfully_removed_all), Toast.LENGTH_SHORT).show()
         }
-        builder.setNegativeButton("No"){ _, _ -> }
-        builder.setTitle("Delete everything?")
-        builder.setMessage("Are you sure you want to delete everything?")
+        builder.setNegativeButton(getString(R.string.no)){ _, _ -> }
+        builder.setTitle(getString(R.string.delete_everything))
+        builder.setMessage(getString(R.string.delete_everything_confirmation))
         builder.create().show()
     }
 }

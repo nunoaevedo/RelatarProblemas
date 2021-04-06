@@ -47,11 +47,11 @@ class AddNotesFragment : Fragment() {
             val note = Note(0, title, description, Date().time)
             //Create Note
             mNoteViewModel.addNote(note)
-            Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.successfully_added), Toast.LENGTH_SHORT).show()
             //Navigate back
             findNavController().popBackStack()
         }else{
-            Toast.makeText(requireContext(), "Please fill out all fields!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.fill_out_all_fields), Toast.LENGTH_SHORT).show()
         }
     }
 

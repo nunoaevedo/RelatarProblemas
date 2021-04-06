@@ -54,12 +54,12 @@ class UpdateNotesFragment : Fragment() {
             val updatedNote = Note(args.currentNote.id, title, description, args.currentNote.date)
             //Update Current User
             mNoteViewModel.updateNote(updatedNote)
-            Toast.makeText(requireContext(), "Updated Successfully!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.successfully_updated), Toast.LENGTH_SHORT).show()
             //Navigate Back
             findNavController().popBackStack()
         }
         else{
-            Toast.makeText(requireContext(), "Please fill out all fields!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.fill_out_all_fields), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -80,12 +80,12 @@ class UpdateNotesFragment : Fragment() {
 
     private fun deleteNote() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Yes") {_,_ ->
+        builder.setPositiveButton(getString(R.string.yes)) {_,_ ->
             mNoteViewModel.deleteNote(args.currentNote)
             Toast.makeText(requireContext(), "Successfully removed ${args.currentNote.title}", Toast.LENGTH_SHORT).show()
             findNavController().popBackStack()
         }
-        builder.setNegativeButton("No"){ _, _ -> }
+        builder.setNegativeButton(getString(R.string.no)){ _, _ -> }
         builder.setTitle("Delete ${args.currentNote.title}?")
         builder.setMessage("Are you sure you want to delete ${args.currentNote.title}?")
         builder.create().show()
