@@ -11,27 +11,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bem_vindo"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/username_editText"
         app:layout_constraintHorizontal_bias="0.237"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
+        app:layout_constraintStart_toStartOf="@+id/username_editText"
         />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/username_editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autofillHints="no"
         android:ems="10"
         android:hint="@string/nome_de_utilizador"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPassword"
+        app:layout_constraintBottom_toTopOf="@+id/password_editText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/password_editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autofillHints="no"
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:text="@string/entrar"
         app:layout_constraintBottom_toTopOf="@+id/view_notes_button"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword"
+        app:layout_constraintEnd_toEndOf="@+id/password_editText"
         android:layout_marginBottom="150dp"/>
 
     <Button

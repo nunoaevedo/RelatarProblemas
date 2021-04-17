@@ -37,8 +37,6 @@ class UpdateNotesFragment : Fragment() {
             updateItem()
         }
 
-        
-
         //Add menu
         setHasOptionsMenu(true)
 
@@ -50,9 +48,9 @@ class UpdateNotesFragment : Fragment() {
         val description = update_note_description_editText.text.toString()
 
         if (inputCheck(title, description)){
-            //Create User Object
+            //Create Note Object
             val updatedNote = Note(args.currentNote.id, title, description, args.currentNote.date)
-            //Update Current User
+            //Update Current Note
             mNoteViewModel.updateNote(updatedNote)
             Toast.makeText(requireContext(), getString(R.string.successfully_updated), Toast.LENGTH_SHORT).show()
             //Navigate Back

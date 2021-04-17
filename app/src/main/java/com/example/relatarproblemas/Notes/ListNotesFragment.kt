@@ -47,6 +47,13 @@ class ListNotesFragment : Fragment() {
         //Add menu
         setHasOptionsMenu(true)
 
+        if((activity as NotesActivity).supportActionBar != null){
+            val actionBar = (activity as NotesActivity).supportActionBar
+            actionBar!!.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeButtonEnabled(true)
+
+        }
+
 
         return view
     }
@@ -56,11 +63,16 @@ class ListNotesFragment : Fragment() {
         inflater.inflate(R.menu.delete_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_delete){
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.menu_delete -> {
             deleteAllNotes()
+            true
         }
-        return super.onOptionsItemSelected(item)
+        android.R.id.home -> {
+            activity?.finish()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     private fun deleteAllNotes() {
