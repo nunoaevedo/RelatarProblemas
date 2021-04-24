@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.relatarproblemas.Retrofit.APIRepository.APIRepository
 import com.example.relatarproblemas.Retrofit.Point.Point
+import com.example.relatarproblemas.Retrofit.Type_Point.Type_Point
 import com.example.relatarproblemas.Retrofit.User.LoginUser
 import com.example.relatarproblemas.Retrofit.User.User
 import kotlinx.coroutines.launch
@@ -14,6 +15,7 @@ class RetrofitViewModel(private val repository: APIRepository) : ViewModel() {
 
     val userResponse: MutableLiveData<Response<User>> = MutableLiveData()
     val pointListResponse: MutableLiveData<Response<List<Point>>> = MutableLiveData()
+    val typePointListResponse: MutableLiveData<Response<List<Type_Point>>> = MutableLiveData()
     
     fun login(login : LoginUser){
         viewModelScope.launch {
@@ -35,5 +37,14 @@ class RetrofitViewModel(private val repository: APIRepository) : ViewModel() {
             pointListResponse.value = response
         }
     }
+
+    fun getPointTypes() {
+        viewModelScope.launch {
+            val response = repository.getPointTypes()
+            typePointListResponse.value = response
+        }
+    }
+
+
 
 }

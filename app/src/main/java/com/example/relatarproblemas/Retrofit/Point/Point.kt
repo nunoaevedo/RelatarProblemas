@@ -1,5 +1,6 @@
 package com.example.relatarproblemas.Retrofit.Point
 
+import android.net.Uri
 import java.util.*
 
 data class Point(
@@ -9,6 +10,7 @@ data class Point(
         val latitude : Float,
         val longitude : Float,
         val user_id : Int,
-        val type_id : Int
+        val type_id : Int,
+        val photo : Uri
 
         )
