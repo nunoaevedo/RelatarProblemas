@@ -2,6 +2,7 @@ package com.example.relatarproblemas.Retrofit.APIRepository
 
 import com.example.relatarproblemas.Retrofit.API.RetrofitInstance
 import com.example.relatarproblemas.Retrofit.Point.Point
+import com.example.relatarproblemas.Retrofit.Point.PointUpdate
 import com.example.relatarproblemas.Retrofit.Type_Point.Type_Point
 import com.example.relatarproblemas.Retrofit.User.LoginUser
 import com.example.relatarproblemas.Retrofit.User.User
@@ -27,6 +28,18 @@ class APIRepository {
 
     suspend fun newPoint(point : Point) : Response<Point>{
         return RetrofitInstance.api.newPoint(point)
+    }
+
+    suspend fun getPointById(id : Int) : Response<Point>{
+        return RetrofitInstance.api.getPointById(id)
+    }
+
+    suspend fun deletePoint(id: Int) : Response<String>{
+        return RetrofitInstance.api.deletePoint(id)
+    }
+
+    suspend fun updatePoint(id : Int, point : PointUpdate) : Response<String>{
+        return RetrofitInstance.api.updatePoint(id, point)
     }
 
 }

@@ -1,13 +1,12 @@
 package com.example.relatarproblemas.Retrofit.API
 
 import com.example.relatarproblemas.Retrofit.Point.Point
+import com.example.relatarproblemas.Retrofit.Point.PointUpdate
 import com.example.relatarproblemas.Retrofit.Type_Point.Type_Point
 import com.example.relatarproblemas.Retrofit.User.LoginUser
 import com.example.relatarproblemas.Retrofit.User.User
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface SlimAPI {
 
@@ -29,5 +28,21 @@ interface SlimAPI {
     suspend fun newPoint(
             @Body point : Point
     ) : Response<Point>
+
+    @GET("point/{id}")
+    suspend fun getPointById(
+            @Path("id") id : Int
+    ) : Response<Point>
+
+    @POST("delete/point/{id}")
+    suspend fun deletePoint(
+            @Path("id") id:Int
+    ) : Response<String>
+
+    @POST("update/point/{id}")
+    suspend fun updatePoint(
+            @Path("id") id : Int,
+            @Body point : PointUpdate
+    ) : Response<String>
 
 }

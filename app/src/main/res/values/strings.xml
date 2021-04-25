@@ -32,4 +32,7 @@
     <string name="no_problem_type">Please select a problem type.</string>
     <string name="point_creted">Point Created</string>
     <string name="problem_create_point">Problem creating point</string>
+    <string name="point_doesnt_exist">Point does not exist.</string>
+    <string name="type_of_problem">Type of problem:</string>
+    <string name="distance">Distance:</string>
 </resources>

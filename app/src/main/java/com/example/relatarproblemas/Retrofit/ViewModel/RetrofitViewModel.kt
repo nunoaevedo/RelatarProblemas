@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.relatarproblemas.Retrofit.APIRepository.APIRepository
 import com.example.relatarproblemas.Retrofit.Point.Point
+import com.example.relatarproblemas.Retrofit.Point.PointUpdate
 import com.example.relatarproblemas.Retrofit.Type_Point.Type_Point
 import com.example.relatarproblemas.Retrofit.User.LoginUser
 import com.example.relatarproblemas.Retrofit.User.User
@@ -17,7 +18,9 @@ class RetrofitViewModel(private val repository: APIRepository) : ViewModel() {
     val pointListResponse: MutableLiveData<Response<List<Point>>> = MutableLiveData()
     val typePointListResponse: MutableLiveData<Response<List<Type_Point>>> = MutableLiveData()
     val pointResponse: MutableLiveData<Response<Point>> = MutableLiveData()
-    
+    val stringResponse : MutableLiveData<Response<String>> = MutableLiveData()
+    val intResponse : MutableLiveData<Response<Int>> = MutableLiveData()
+
     fun login(login : LoginUser){
         viewModelScope.launch {
             val response = repository.login(login)
@@ -50,6 +53,27 @@ class RetrofitViewModel(private val repository: APIRepository) : ViewModel() {
         viewModelScope.launch {
             val response = repository.newPoint(point)
             pointResponse.value = response
+        }
+    }
+
+    fun getPointById(id : Int) {
+        viewModelScope.launch {
+            val response = repository.getPointById(id)
+            pointResponse.value = response
+        }
+    }
+
+    fun deletePoint(id:Int) {
+        viewModelScope.launch {
+            val response = repository.deletePoint(id)
+            stringResponse.value = response
+        }
+    }
+
+    fun updatePoint(id: Int, point : PointUpdate) {
+        viewModelScope.launch {
+            val response = repository.updatePoint(id, point)
+            stringResponse.value = response
         }
     }
 

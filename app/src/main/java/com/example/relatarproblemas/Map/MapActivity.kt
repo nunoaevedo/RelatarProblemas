@@ -26,6 +26,7 @@ import com.example.relatarproblemas.Notes.NotesActivity
 import com.example.relatarproblemas.R
 import com.example.relatarproblemas.Retrofit.APIRepository.APIRepository
 import com.example.relatarproblemas.Retrofit.Point.Point
+import com.example.relatarproblemas.Retrofit.Point.PointUpdate
 import com.example.relatarproblemas.Retrofit.Type_Point.Type_Point
 import com.example.relatarproblemas.Retrofit.ViewModel.RetrofitViewModel
 import com.example.relatarproblemas.Retrofit.ViewModel.RetrofitViewModelFactory
@@ -43,6 +44,9 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_map.*
 import kotlinx.android.synthetic.main.create_point.*
 import kotlinx.android.synthetic.main.create_point.view.*
+import kotlinx.android.synthetic.main.create_point.view.problem_description_edit
+import kotlinx.android.synthetic.main.create_point.view.type_spinner
+import kotlinx.android.synthetic.main.point_info.view.*
 import java.util.*
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -345,55 +349,133 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
 
     override fun onMarkerClick(p0: Marker?): Boolean {
 
-//        val inflater = layoutInflater
-//
-//        val inflate_view = inflater.inflate(R.layout.point_info, null)
-//
-//        val problemDescriptionEdit = inflate_view.problem_description_edit
-//        problemDescriptionEdit.setText(p0?.title)
-//
-//        problemDescriptionEdit.isEnabled = false
+        viewModel.getPointById(p0?.tag as Int)
+        viewModel.pointResponse.observe(this, Observer { response ->
+            if (response.isSuccessful) {
+                if (response.body() != null) {
+                    val point = response.body()
+                    pointDialog(point!!, p0)
+                } else {
+                    Toast.makeText(this, getString(R.string.point_doesnt_exist), Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, response.code(), Toast.LENGTH_SHORT).show()
+            }
+        })
 
-//        val type_spinner = inflate_view.type_spinner
+
+        return false
+    }
+
+    fun calculateDistance(curLat: Double, curLng : Double, pointLat : Double, pointLng: Double  ) : Float {
+        val results = FloatArray(1)
+        Location.distanceBetween(curLat, curLng, pointLat, pointLng, results)
+        return results[0]
+    }
+
+    fun pointDialog(point: Point, marker: Marker) {
+
+        val inflater = layoutInflater
+
+        val inflate_view = inflater.inflate(R.layout.point_info, null)
+
+        val problemDescriptionEdit = inflate_view.problem_description_edit
+        problemDescriptionEdit.setText(point.comment)
+
+        val distance_text = inflate_view.distance_text
+        distance_text.text = (calculateDistance(lastLocation.latitude, lastLocation.longitude, point.latitude, point.longitude)/1000).toString() + " KM"
+
+        val type_spinner = inflate_view.type_spinner
 //        imagePlaceholder = inflate_view.image_placeholder
-//        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, point_types)
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//        type_spinner.adapter = adapter
-//
-//        type_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                current_type = adapter.getItem(position)!!
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//                Toast.makeText(applicationContext, getString(R.string.no_problem_type), Toast.LENGTH_SHORT).show()
-//            }
-//
-//        }
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, point_types)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        type_spinner.adapter = adapter
+
+        type_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                current_type = adapter.getItem(position)!!
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                Toast.makeText(applicationContext, getString(R.string.no_problem_type), Toast.LENGTH_SHORT).show()
+            }
+
+        }
 
 //        inflate_view.load_image.setOnClickListener {
 //            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
 //            startActivityForResult(gallery, pickImage)
 //        }
 
-//        val alertDialog = AlertDialog.Builder(this)
-//        alertDialog.setTitle("Create new problem:")
-//        alertDialog.setView(inflate_view)
-//        alertDialog.setCancelable(true)
-//
-//        alertDialog.setNegativeButton("Cancel") {_, _ ->
-//            Toast.makeText(this, getString(R.string.action_canceled), Toast.LENGTH_SHORT).show()
-//        }
-//
-//        alertDialog.setPositiveButton("Create", null)
-//
-//
-//        val dialog = alertDialog.create()
-//        dialog.show()
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.setTitle("Problem:")
+        alertDialog.setView(inflate_view)
+        alertDialog.setCancelable(true)
+
+        if(point.user_id != userId){
+            problemDescriptionEdit.isEnabled = false
+            type_spinner.isEnabled = false
+        }
+        else{
+            alertDialog.setNeutralButton("Delete",  null)
+            alertDialog.setPositiveButton("Update", null)
+        }
+
+        alertDialog.setNegativeButton("Cancel") {_, _ ->
+            Toast.makeText(this, getString(R.string.action_canceled), Toast.LENGTH_SHORT).show()
+        }
+
+        val dialog = alertDialog.create()
+        dialog.show()
 
 
 
-        return false
+        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+            if(point.user_id == userId){
+                viewModel.deletePoint(point.id)
+                viewModel.stringResponse.observe(this, Observer { response ->
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            Toast.makeText(this, response.body(), Toast.LENGTH_SHORT).show()
+                            marker.remove()
+                            dialog.dismiss()
+                        } else {
+                            Toast.makeText(this, getString(R.string.point_doesnt_exist), Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(this, response.code(), Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }else{
+                Toast.makeText(this, "You can't delete this point!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            if (point.user_id == userId){
+                val comment = problemDescriptionEdit.text
+                val point_update = PointUpdate(comment.toString(), current_type.id)
+
+                viewModel.updatePoint(point.id, point_update)
+                viewModel.pointResponse.observe(this, Observer { response ->
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            Toast.makeText(this, "Point Updated", Toast.LENGTH_SHORT).show()
+                            marker.title = response.body()!!.comment
+                            dialog.dismiss()
+                        } else {
+                            Toast.makeText(this, getString(R.string.point_doesnt_exist), Toast.LENGTH_SHORT).show()
+                        }
+                    }else{
+                        Toast.makeText(this, response.code(), Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+            else{
+                Toast.makeText(this, "You can't update this point!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 
 
