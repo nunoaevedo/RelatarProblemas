@@ -25,4 +25,9 @@ interface SlimAPI {
     @GET("point_types/")
     suspend fun getPointTypes(): Response<List<Type_Point>>
 
+    @POST("new/point/")
+    suspend fun newPoint(
+            @Body point : Point
+    ) : Response<Point>
+
 }

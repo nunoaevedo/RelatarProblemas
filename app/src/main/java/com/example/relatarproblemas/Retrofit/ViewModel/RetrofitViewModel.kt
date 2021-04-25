@@ -16,6 +16,7 @@ class RetrofitViewModel(private val repository: APIRepository) : ViewModel() {
     val userResponse: MutableLiveData<Response<User>> = MutableLiveData()
     val pointListResponse: MutableLiveData<Response<List<Point>>> = MutableLiveData()
     val typePointListResponse: MutableLiveData<Response<List<Type_Point>>> = MutableLiveData()
+    val pointResponse: MutableLiveData<Response<Point>> = MutableLiveData()
     
     fun login(login : LoginUser){
         viewModelScope.launch {
@@ -42,6 +43,13 @@ class RetrofitViewModel(private val repository: APIRepository) : ViewModel() {
         viewModelScope.launch {
             val response = repository.getPointTypes()
             typePointListResponse.value = response
+        }
+    }
+
+    fun newPoint(point : Point) {
+        viewModelScope.launch {
+            val response = repository.newPoint(point)
+            pointResponse.value = response
         }
     }
 

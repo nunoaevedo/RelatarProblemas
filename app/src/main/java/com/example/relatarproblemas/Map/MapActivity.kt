@@ -3,6 +3,7 @@ package com.example.relatarproblemas.Map
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.location.Location
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -14,16 +15,17 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.relatarproblemas.Login.LoginActivity
 import com.example.relatarproblemas.Notes.NotesActivity
 import com.example.relatarproblemas.R
 import com.example.relatarproblemas.Retrofit.APIRepository.APIRepository
+import com.example.relatarproblemas.Retrofit.Point.Point
 import com.example.relatarproblemas.Retrofit.Type_Point.Type_Point
 import com.example.relatarproblemas.Retrofit.ViewModel.RetrofitViewModel
 import com.example.relatarproblemas.Retrofit.ViewModel.RetrofitViewModelFactory
@@ -36,12 +38,14 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_map.*
 import kotlinx.android.synthetic.main.create_point.*
 import kotlinx.android.synthetic.main.create_point.view.*
+import java.util.*
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
 //    MAP
     private lateinit var mMap: GoogleMap
@@ -64,7 +68,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val pickImage = 100
     private var imageUri: Uri? = null
-    private lateinit var imagePlaceholder: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +84,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
                 lastLocation = p0.lastLocation
-                var loc = LatLng(lastLocation.latitude, lastLocation.longitude)
+                val loc = LatLng(lastLocation.latitude, lastLocation.longitude)
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(loc))
             }
         }
@@ -106,20 +109,18 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             if (response.isSuccessful) {
                 if (response.body() != null){
                     response.body()!!.forEach {
-                        Log.d("Response Point ID: ", it.id.toString())
-                        Log.d("Response Comment: ", it.comment)
-                        Log.d("Response Date: ", it.date.toString())
-                        Log.d("Response Longitude: ", it.longitude.toString())
-                        Log.d("Response Latitude: ", it.latitude.toString())
-                        Log.d("Response User ID: ", it.user_id.toString())
-                        Log.d("Response Type ID: ", it.type_id.toString())
+                        val position = LatLng(it.latitude, it.longitude)
 
-                        val position = LatLng(it.latitude.toDouble(), it.longitude.toDouble())
+                        if (it.user_id == userId){
+                            val marker = mMap.addMarker(MarkerOptions().position(position).title(it.comment).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                            marker.tag = it.id
+                        }
+                        else{
+                            val marker = mMap.addMarker(MarkerOptions().position(position).title(it.comment))
+                            marker.tag = it.id
 
-                        if (it.user_id == userId)
-                            mMap.addMarker(MarkerOptions().position(position).title(it.comment).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
-                        else
-                            mMap.addMarker(MarkerOptions().position(position).title(it.comment))
+                        }
+
 
                     }
                 }
@@ -153,7 +154,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val problemDescriptionEdit = inflate_view.problem_description_edit
         val type_spinner = inflate_view.type_spinner
-        imagePlaceholder = inflate_view.image_placeholder
+//        imagePlaceholder = inflate_view.image_placeholder
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, point_types)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         type_spinner.adapter = adapter
@@ -183,11 +184,45 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             Toast.makeText(this, getString(R.string.action_canceled), Toast.LENGTH_SHORT).show()
         }
 
-        alertDialog.setPositiveButton("Create") {_, _ ->
-            Toast.makeText(this, "create", Toast.LENGTH_SHORT).show()
-        }
+        alertDialog.setPositiveButton("Create", null)
+
+
         val dialog = alertDialog.create()
         dialog.show()
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            if (problemDescriptionEdit.text.isBlank()){
+                Toast.makeText(applicationContext, "please fill out description", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val comment = problemDescriptionEdit.text
+//                Toast.makeText(applicationContext, comment.toString(), Toast.LENGTH_SHORT).show()
+                if (imageUri != null){
+                    val point = Point(0, comment.toString(), Date(), lastLocation.latitude, lastLocation.longitude, userId, current_type.id, "")
+
+                    viewModel.newPoint(point)
+                    viewModel.pointResponse.observe(this, Observer { response ->
+                        if (response.isSuccessful) {
+                            if (response.body() != null) {
+                                val position = LatLng(response.body()!!.latitude, response.body()!!.longitude)
+                                mMap.addMarker(MarkerOptions()
+                                        .position(position)
+                                        .title(response.body()!!.comment)
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                Toast.makeText(this, getString(R.string.point_creted), Toast.LENGTH_SHORT).show()
+                                dialog.dismiss()
+                            } else {
+                                Toast.makeText(this, getString(R.string.problem_create_point), Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(this, response.code(), Toast.LENGTH_SHORT).show()
+                        }
+                    })
+                }
+
+            }
+
+        }
 
     }
 
@@ -195,7 +230,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == pickImage) {
             imageUri = data?.data
-            imagePlaceholder.setImageURI(imageUri)
         }
     }
 
@@ -304,9 +338,63 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 10f))
             }
         }
+
+        mMap.setOnMarkerClickListener(this)
+
     }
 
+    override fun onMarkerClick(p0: Marker?): Boolean {
 
+//        val inflater = layoutInflater
+//
+//        val inflate_view = inflater.inflate(R.layout.point_info, null)
+//
+//        val problemDescriptionEdit = inflate_view.problem_description_edit
+//        problemDescriptionEdit.setText(p0?.title)
+//
+//        problemDescriptionEdit.isEnabled = false
+
+//        val type_spinner = inflate_view.type_spinner
+//        imagePlaceholder = inflate_view.image_placeholder
+//        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, point_types)
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        type_spinner.adapter = adapter
+//
+//        type_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//                current_type = adapter.getItem(position)!!
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                Toast.makeText(applicationContext, getString(R.string.no_problem_type), Toast.LENGTH_SHORT).show()
+//            }
+//
+//        }
+
+//        inflate_view.load_image.setOnClickListener {
+//            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+//            startActivityForResult(gallery, pickImage)
+//        }
+
+//        val alertDialog = AlertDialog.Builder(this)
+//        alertDialog.setTitle("Create new problem:")
+//        alertDialog.setView(inflate_view)
+//        alertDialog.setCancelable(true)
+//
+//        alertDialog.setNegativeButton("Cancel") {_, _ ->
+//            Toast.makeText(this, getString(R.string.action_canceled), Toast.LENGTH_SHORT).show()
+//        }
+//
+//        alertDialog.setPositiveButton("Create", null)
+//
+//
+//        val dialog = alertDialog.create()
+//        dialog.show()
+
+
+
+        return false
+    }
 
 
 }

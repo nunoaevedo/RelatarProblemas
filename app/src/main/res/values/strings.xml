@@ -30,4 +30,6 @@
     <string name="load_image">Load Image</string>
     <string name="action_canceled">Action Canceled</string>
     <string name="no_problem_type">Please select a problem type.</string>
+    <string name="point_creted">Point Created</string>
+    <string name="problem_create_point">Problem creating point</string>
 </resources>

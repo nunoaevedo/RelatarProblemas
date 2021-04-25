@@ -25,4 +25,8 @@ class APIRepository {
         return RetrofitInstance.api.getPointTypes()
     }
 
+    suspend fun newPoint(point : Point) : Response<Point>{
+        return RetrofitInstance.api.newPoint(point)
+    }
+
 }
