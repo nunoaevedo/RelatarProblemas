@@ -21,6 +21,8 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var viewModel: RetrofitViewModel
 
+//    private var userId : Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -40,13 +42,35 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please fill out all fields!", Toast.LENGTH_SHORT).show()
             }
             else{
-                val userId = login(username, password)
-                if (userId > 0){
-                    saveLogin(userId)
-                    toMapActivity()
-                }else {
-                    Toast.makeText(this, "Username or password incorrect!", Toast.LENGTH_SHORT).show()
-                }
+
+                val login = LoginUser(username, password)
+
+                viewModel.login(login)
+                viewModel.userResponse.observe(this, Observer { response ->
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+//                            saveLogin(response.body()?.id!!)
+//                            toMapActivity()
+                            val userId = response.body()?.id!!
+                            saveLogin(userId)
+                            toMapActivity()
+                        }
+                        else {
+                            Toast.makeText(this, "Username or password are incorrect", Toast.LENGTH_SHORT).show()
+                        }
+                            }
+                    else {
+                        Toast.makeText(this, response.code(), Toast.LENGTH_SHORT).show()
+                    }
+                })
+
+//                val userId = login(username, password)
+//                if (userId > 0){
+//                    saveLogin(userId)
+//                    toMapActivity()
+//                }else {
+//                    Toast.makeText(this, "Username or password incorrect!", Toast.LENGTH_SHORT).show()
+//                }
             }
         }
         
