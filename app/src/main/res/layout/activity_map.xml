@@ -13,24 +13,73 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Map.MapActivity"
-        />
+        tools:context=".Map.MapActivity" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="8dp"
         android:clickable="true"
+        android:contentDescription="@string/add_action"
         android:focusable="true"
-        android:tint="@color/white"
+        android:onClick="createPoint"
         android:src="@drawable/ic_add"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/scroll_view"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <HorizontalScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/add_action"
-        android:onClick="createPoint"/>
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <ToggleButton
+                android:id="@+id/blocked_road_toggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/blocked_road"
+                android:textOn="@string/blocked_road"
+                android:textOff="@string/blocked_road" />
+
+            <ToggleButton
+                android:id="@+id/fallen_tree_toggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/fallen_tree"
+                android:textOff="@string/fallen_tree"
+                android:textOn="@string/fallen_tree" />
+
+            <ToggleButton
+                android:id="@+id/dead_animal_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/dead_animal"
+                android:textOn="@string/dead_animal"
+                android:textOff="@string/dead_animal" />
+
+            <ToggleButton
+                android:id="@+id/slippery_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/slippery_pavement"
+                android:textOn="@string/slippery_pavement"
+                android:textOff="@string/slippery_pavement" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

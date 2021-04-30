@@ -1,12 +1,16 @@
 package com.example.relatarproblemas.Retrofit.APIRepository
 
+import android.media.Image
+import android.net.Uri
 import com.example.relatarproblemas.Retrofit.API.RetrofitInstance
 import com.example.relatarproblemas.Retrofit.Point.Point
 import com.example.relatarproblemas.Retrofit.Point.PointUpdate
 import com.example.relatarproblemas.Retrofit.Type_Point.Type_Point
 import com.example.relatarproblemas.Retrofit.User.LoginUser
 import com.example.relatarproblemas.Retrofit.User.User
+import okhttp3.MultipartBody
 import retrofit2.Response
+import java.io.File
 
 class APIRepository {
 
@@ -24,6 +28,10 @@ class APIRepository {
 
     suspend fun getPointTypes() : Response<List<Type_Point>> {
         return RetrofitInstance.api.getPointTypes()
+    }
+
+    suspend fun newPointImage(photo : MultipartBody.Part, comment : String, latitude: Double, longitude : Double, user_id : Int, type : String) : Response<Point>{
+        return RetrofitInstance.api.newPointImage(photo, comment, latitude, longitude, user_id, type)
     }
 
     suspend fun newPoint(point : Point) : Response<Point>{

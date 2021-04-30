@@ -15,8 +15,7 @@ class ListAdapter:RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
 
     private var noteList = emptyList<Note>()
 
-    class MyViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
-    }
+    class MyViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.note_custom_row, parent, false))

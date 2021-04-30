@@ -44,7 +44,7 @@ class AddNotesFragment : Fragment() {
 
         if (inputCheck(title, description)){
             //New note
-            val note = Note(0, title, description, Date().time)
+            val note = Note(0, title, description)
             //Create Note
             mNoteViewModel.addNote(note)
             Toast.makeText(requireContext(), getString(R.string.successfully_added), Toast.LENGTH_SHORT).show()

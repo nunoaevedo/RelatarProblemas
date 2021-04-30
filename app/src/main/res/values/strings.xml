@@ -35,4 +35,20 @@
     <string name="point_doesnt_exist">Point does not exist.</string>
     <string name="type_of_problem">Type of problem:</string>
     <string name="distance">Distance:</string>
+    <string name="notifications">Notifications</string>
+    <string name="max_point_range">Max Point Range (In Meters)</string>
+    <string name="unlimited_range">(0 for Unlimited)</string>
+    <string name="blocked_road">Blocked Road</string>
+    <string name="fallen_tree">Fallen Tree</string>
+    <string name="slippery_pavement">Slippery Pavement</string>
+    <string name="dead_animal">Dead Animal</string>
+
+
+    <string-array name="type_array">
+        <item>Blocked Road</item>
+        <item>Fallen Tree</item>
+        <item>Dead Animal</item>
+        <item>Slippery Pavement</item>
+    </string-array>
+
 </resources>

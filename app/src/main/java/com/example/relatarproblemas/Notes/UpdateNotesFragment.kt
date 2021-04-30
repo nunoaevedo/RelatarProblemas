@@ -49,7 +49,7 @@ class UpdateNotesFragment : Fragment() {
 
         if (inputCheck(title, description)){
             //Create Note Object
-            val updatedNote = Note(args.currentNote.id, title, description, args.currentNote.date)
+            val updatedNote = Note(args.currentNote.id, title, description)
             //Update Current Note
             mNoteViewModel.updateNote(updatedNote)
             Toast.makeText(requireContext(), getString(R.string.successfully_updated), Toast.LENGTH_SHORT).show()

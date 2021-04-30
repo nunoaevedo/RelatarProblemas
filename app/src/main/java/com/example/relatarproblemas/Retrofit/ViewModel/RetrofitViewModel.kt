@@ -1,5 +1,6 @@
 package com.example.relatarproblemas.Retrofit.ViewModel
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +11,9 @@ import com.example.relatarproblemas.Retrofit.Type_Point.Type_Point
 import com.example.relatarproblemas.Retrofit.User.LoginUser
 import com.example.relatarproblemas.Retrofit.User.User
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import retrofit2.Response
+import java.io.File
 
 class RetrofitViewModel(private val repository: APIRepository) : ViewModel() {
 
@@ -49,7 +52,14 @@ class RetrofitViewModel(private val repository: APIRepository) : ViewModel() {
         }
     }
 
-    fun newPoint(point : Point) {
+    fun newPointImage(photo: MultipartBody.Part, comment: String, latitude: Double, longitude: Double, user_id: Int, type: String) {
+        viewModelScope.launch {
+            val response = repository.newPointImage(photo, comment, latitude, longitude, user_id, type)
+            pointResponse.value = response
+        }
+    }
+
+    fun newPoint(point: Point) {
         viewModelScope.launch {
             val response = repository.newPoint(point)
             pointResponse.value = response

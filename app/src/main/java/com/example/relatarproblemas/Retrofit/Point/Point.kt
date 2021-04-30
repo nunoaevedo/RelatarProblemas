@@ -10,7 +10,7 @@ data class Point(
         val latitude: Double,
         val longitude: Double,
         val user_id: Int,
-        val type_id: Int,
+        val type: String,
         val photo: String
 
         )
