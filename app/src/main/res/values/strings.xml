@@ -1,9 +1,77 @@
 <resources>
-    <string name="app_name">Relatar Problemas</string>
-    <string name="splash_screen_image">Splash Screen Image</string>
-    <string name="nome_de_utilizador">Nome de utilizador</string>
+    <string name="app_name">Problem Solver</string>
+    <string name="splash_screen_image" translatable="false">Splash Screen Image</string>
+    <string name="nome_de_utilizador">Username</string>
     <string name="password">Password</string>
-    <string name="entrar">Entrar</string>
-    <string name="ver_notas">Ver notas</string>
-    <string name="bem_vindo">Bem Vindo!</string>
+    <string name="entrar">Login</string>
+    <string name="ver_notas">Notes</string>
+    <string name="bem_vindo">Welcome!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="add_action" translatable="false">Add Action</string>
+    <string name="save">Save</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="ONE" translatable="false">1</string>
+    <string name="delete">Delete</string>
+    <string name="title_activity_map">Map</string>
+    <string name="delete_everything">Delete everything?</string>
+    <string name="delete_everything_confirmation">Are you sure you want to delete everything?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="successfully_removed_all">Successfully removed all notes</string>
+    <string name="successfully_added">Successfully added!</string>
+    <string name="fill_out_all_fields">Please fill out all fields!</string>
+    <string name="successfully_updated">Updated Successfully!</string>
+    <string name="logout">Logout</string>
+    <string name="settings">Settings</string>
+    <string name="describe_the_problem">Describe the problem:</string>
+    <string name="select_the_type_of_problem">Select the type of problem:</string>
+    <string name="load_image">Load Image</string>
+    <string name="action_canceled">Action Canceled</string>
+    <string name="no_problem_type">Please select a problem type.</string>
+    <string name="point_creted">Point Created</string>
+    <string name="problem_create_point">Problem creating point</string>
+    <string name="point_doesnt_exist">Point does not exist.</string>
+    <string name="type_of_problem">Type of problem:</string>
+    <string name="distance">Distance:</string>
+    <string name="notifications">Notifications</string>
+    <string name="max_point_range" translatable="false">Max Point Range (In Meters)</string>
+    <string name="unlimited_range" translatable="false">(0 for Unlimited)</string>
+    <string name="blocked_road">Blocked Road</string>
+    <string name="fallen_tree">Fallen Tree</string>
+    <string name="slippery_pavement">Slippery Pavement</string>
+    <string name="dead_animal">Dead Animal</string>
+    <string name="fill_description">Please fill out description</string>
+    <string name="point_removed">Point removed.</string>
+    <string name="cant_delete_point">You can\'t delete this point!</string>
+    <string name="point_updated">Point Updated</string>
+    <string name="cant_update_point">You can\'t update this point!</string>
+    <string name="fill_all_fields">Please fill out all fields!</string>
+    <string name="username_password_incorrect">Username or password are incorrect</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="enable_notifications_toast">Enable notifications to create a Geofence</string>
+
+<!--  SHARED PREFRENCES KEYS  -->
+
+    <string name="settings_key" translatable="false">settings</string>
+    <string name="settings_maxRange" translatable="false">maxRange</string>
+    <string name="settings_notifications" translatable="false">notifications</string>
+    <string name="settings_geofence" translatable="false">geofence_radius</string>
+    <string name="geofence_channel_id" translatable="false">geofence_transition_id</string>
+    <string name="geofence_channel_name" translatable="false">geofence_notification</string>
+    <string name="broadcast_receiver_tag" translatable="false">BroadcastReceiver</string>
+    <string name="enter_geofence">Entered the Geofence</string>
+    <string name="exit_geofence" translatable="false">Exited the Geofence</string>
+    <string name="invalid" translatable="false">Invalid Type</string>
+
+
+    <string-array name="type_array">
+        <item>Blocked Road</item>
+        <item>Fallen Tree</item>
+        <item>Dead Animal</item>
+        <item>Slippery Pavement</item>
+    </string-array>
+
 </resources>
