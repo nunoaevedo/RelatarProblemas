@@ -80,12 +80,12 @@ class UpdateNotesFragment : Fragment() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton(getString(R.string.yes)) {_,_ ->
             mNoteViewModel.deleteNote(args.currentNote)
-            Toast.makeText(requireContext(), "Successfully removed ${args.currentNote.title}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.successfully_removed), Toast.LENGTH_SHORT).show()
             findNavController().popBackStack()
         }
         builder.setNegativeButton(getString(R.string.no)){ _, _ -> }
-        builder.setTitle("Delete ${args.currentNote.title}?")
-        builder.setMessage("Are you sure you want to delete ${args.currentNote.title}?")
+        builder.setTitle(getString(R.string.delete_current_note))
+        builder.setMessage(getString(R.string.delete_current_note_confirm))
         builder.create().show()
     }
 

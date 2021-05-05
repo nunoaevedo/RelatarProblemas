@@ -83,15 +83,13 @@
 
     <ImageView
         android:id="@+id/compass_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_compass"
-        tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="517dp"
+        android:layout_width="106dp"
+        android:layout_height="101dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@id/scroll_view"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"/>
+        app:srcCompat="@drawable/ic_compass" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
