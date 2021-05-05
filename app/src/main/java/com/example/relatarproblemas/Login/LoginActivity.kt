@@ -30,8 +30,6 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var viewModel: RetrofitViewModel
 
-//    private var userId : Int = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)

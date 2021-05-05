@@ -378,8 +378,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
     }
         
     private fun logout(){
-        val sharedPrefEdit = getSharedPreferences(R.string.login_key.toString(), Context.MODE_PRIVATE).edit()
-        sharedPrefEdit.putInt(R.string.user_login_key.toString(), 0)
+        val sharedPrefEdit = getSharedPreferences(getString(R.string.login_key), Context.MODE_PRIVATE).edit()
+        sharedPrefEdit.putInt(getString(R.string.user_login_key), 0)
         sharedPrefEdit.apply()
         toLoginActivity()
     }
