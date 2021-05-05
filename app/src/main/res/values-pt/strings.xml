@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Relatar Problemas</string>
+    <string name="nome_de_utilizador">Utilizador</string>
+    <string name="password">Senha</string>
+    <string name="entrar">Entrar</string>
+    <string name="ver_notas">Notas</string>
+    <string name="bem_vindo">Bem-Vindo!</string>
+    <string name="save">Guardar</string>
+    <string name="title">Título</string>
+    <string name="description">Descrição</string>
+    <string name="delete">Apagar</string>
+    <string name="title_activity_map">Mapa</string>
+    <string name="delete_everything">Apagar tudo?</string>
+    <string name="delete_everything_confirmation">Tem a certeza que quer apagar tudo?</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="successfully_removed_all">Todas as notas foram removidas com sucesso!</string>
+    <string name="successfully_added">Adicionado com sucesso!</string>
+    <string name="fill_out_all_fields">Preecha todos os campos!</string>
+    <string name="successfully_updated">Atualizado com sucesso!</string>
+    <string name="logout">Sair</string>
+    <string name="settings">Opções</string>
+    <string name="describe_the_problem">Descreva o problema:</string>
+    <string name="select_the_type_of_problem">Selecione o tipo de problema:</string>
+    <string name="load_image">Carregar Imagem</string>
+    <string name="action_canceled">Ação Cancelada</string>
+    <string name="no_problem_type">Selecione um tipo de problema.</string>
+    <string name="point_creted">Ponto criado.</string>
+    <string name="problem_create_point">Problema a criar o ponto.</string>
+    <string name="point_doesnt_exist">Ponto não existe.</string>
+    <string name="type_of_problem">Tipo de problema:</string>
+    <string name="distance">Distância:</string>
+    <string name="notifications">Notificações</string>
+    <string name="blocked_road">Estrada Bloqueada</string>
+    <string name="fallen_tree">Árvore Caída</string>
+    <string name="slippery_pavement">Pavimento Escorregadio</string>
+    <string name="dead_animal">Animal Morto</string>
+    <string name="fill_description">Preencha a descrição</string>
+    <string name="point_removed">Ponto removido.</string>
+    <string name="cant_delete_point">Não pode remover este ponto!</string>
+    <string name="point_updated">Ponto Atualizado</string>
+    <string name="cant_update_point">Não pode atualizar este ponto!</string>
+    <string name="fill_all_fields">Preencha todos os campos</string>
+    <string name="username_password_incorrect">Utilizador ou senha incorretos.</string>
+</resources>

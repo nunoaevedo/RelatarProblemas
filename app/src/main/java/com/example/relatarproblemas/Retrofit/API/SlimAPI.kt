@@ -8,6 +8,8 @@ import com.example.relatarproblemas.Retrofit.Type_Point.Type_Point
 import com.example.relatarproblemas.Retrofit.User.LoginUser
 import com.example.relatarproblemas.Retrofit.User.User
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 import java.io.File
@@ -32,38 +34,37 @@ interface SlimAPI {
     @POST("new/point/")
     suspend fun newPointImage(
             @Part photo : MultipartBody.Part,
-            @Part("comment") comment : String,
+            @Part("comment") comment : RequestBody,
             @Part("latitude") latitude : Double,
             @Part("longitude") longitude : Double,
             @Part("user_id") user_id : Int,
-            @Part("type") type : String
+            @Part("type") type : RequestBody
     ) : Response<Point>
 
-
+    @Multipart
     @POST("new/point/")
-    suspend fun newPoint(
-//            @Part("comment") comment : String,
-//            @Part("latitude") latitude : Double,
-//            @Part("longitude") longitude : Double,
-//            @Part("user_id") user_id : Int,
-//            @Part("type") type : String
-            @Body point: Point
-    ) : Response<Point>
+    fun newPoint(
+            @Part("comment") comment : RequestBody,
+            @Part("latitude") latitude : Double,
+            @Part("longitude") longitude : Double,
+            @Part("user_id") user_id : Int,
+            @Part("type") type : RequestBody
+    ) : Call<Point>
 
     @GET("point/{id}")
-    suspend fun getPointById(
+    fun getPointById(
             @Path("id") id : Int
-    ) : Response<Point>
+    ) : Call<Point>
 
     @POST("delete/point/{id}")
-    suspend fun deletePoint(
+    fun deletePoint(
             @Path("id") id:Int
-    ) : Response<String>
+    ) : Call<String>
 
     @POST("update/point/{id}")
-    suspend fun updatePoint(
+    fun updatePoint(
             @Path("id") id : Int,
             @Body point : PointUpdate
-    ) : Response<String>
+    ) : Call<Point>
 
 }

@@ -12,8 +12,9 @@ import com.example.relatarproblemas.Retrofit.User.LoginUser
 import com.example.relatarproblemas.Retrofit.User.User
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.Response
-import java.io.File
 
 class RetrofitViewModel(private val repository: APIRepository) : ViewModel() {
 
@@ -21,8 +22,12 @@ class RetrofitViewModel(private val repository: APIRepository) : ViewModel() {
     val pointListResponse: MutableLiveData<Response<List<Point>>> = MutableLiveData()
     val typePointListResponse: MutableLiveData<Response<List<Type_Point>>> = MutableLiveData()
     val pointResponse: MutableLiveData<Response<Point>> = MutableLiveData()
+    val pointCallResponse: MutableLiveData<Call<Point>> = MutableLiveData()
     val stringResponse : MutableLiveData<Response<String>> = MutableLiveData()
+    val stringCallResponse : MutableLiveData<Call<String>> = MutableLiveData()
     val intResponse : MutableLiveData<Response<Int>> = MutableLiveData()
+
+    val imageUri: MutableLiveData<Uri> = MutableLiveData()
 
     fun login(login : LoginUser){
         viewModelScope.launch {
@@ -52,38 +57,50 @@ class RetrofitViewModel(private val repository: APIRepository) : ViewModel() {
         }
     }
 
-    fun newPointImage(photo: MultipartBody.Part, comment: String, latitude: Double, longitude: Double, user_id: Int, type: String) {
+    fun newPointImage(photo: MultipartBody.Part, comment: RequestBody, latitude: Double, longitude: Double, user_id: Int, type: RequestBody) {
         viewModelScope.launch {
             val response = repository.newPointImage(photo, comment, latitude, longitude, user_id, type)
             pointResponse.value = response
         }
     }
 
-    fun newPoint(point: Point) {
-        viewModelScope.launch {
-            val response = repository.newPoint(point)
-            pointResponse.value = response
-        }
-    }
+//    fun newPoint(point: Point) {
+//        viewModelScope.launch {
+//            val response = repository.newPoint(point)
+//            pointCallResponse.value = response
+//        }
+//    }
 
     fun getPointById(id : Int) {
         viewModelScope.launch {
             val response = repository.getPointById(id)
-            pointResponse.value = response
+            pointCallResponse.value = response
         }
     }
 
     fun deletePoint(id:Int) {
         viewModelScope.launch {
             val response = repository.deletePoint(id)
-            stringResponse.value = response
+            stringCallResponse.value = response
         }
     }
 
     fun updatePoint(id: Int, point : PointUpdate) {
         viewModelScope.launch {
             val response = repository.updatePoint(id, point)
-            stringResponse.value = response
+            pointCallResponse.value = response
+        }
+    }
+
+    fun updateUri(image: Uri?) {
+        viewModelScope.launch{
+            imageUri.value = image
+        }
+    }
+
+    fun removeUri(){
+        viewModelScope.launch {
+            imageUri.value = null
         }
     }
 

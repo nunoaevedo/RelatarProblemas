@@ -1,7 +1,5 @@
 package com.example.relatarproblemas.Retrofit.APIRepository
 
-import android.media.Image
-import android.net.Uri
 import com.example.relatarproblemas.Retrofit.API.RetrofitInstance
 import com.example.relatarproblemas.Retrofit.Point.Point
 import com.example.relatarproblemas.Retrofit.Point.PointUpdate
@@ -9,8 +7,9 @@ import com.example.relatarproblemas.Retrofit.Type_Point.Type_Point
 import com.example.relatarproblemas.Retrofit.User.LoginUser
 import com.example.relatarproblemas.Retrofit.User.User
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.Response
-import java.io.File
 
 class APIRepository {
 
@@ -30,23 +29,23 @@ class APIRepository {
         return RetrofitInstance.api.getPointTypes()
     }
 
-    suspend fun newPointImage(photo : MultipartBody.Part, comment : String, latitude: Double, longitude : Double, user_id : Int, type : String) : Response<Point>{
+    suspend fun newPointImage(photo : MultipartBody.Part, comment : RequestBody, latitude: Double, longitude : Double, user_id : Int, type : RequestBody) : Response<Point>{
         return RetrofitInstance.api.newPointImage(photo, comment, latitude, longitude, user_id, type)
     }
 
-    suspend fun newPoint(point : Point) : Response<Point>{
-        return RetrofitInstance.api.newPoint(point)
-    }
+//    suspend fun newPoint(point : Point) : Call<Point>{
+//        return RetrofitInstance.api.newPoint(point)
+//    }
 
-    suspend fun getPointById(id : Int) : Response<Point>{
+    fun getPointById(id : Int) : Call<Point> {
         return RetrofitInstance.api.getPointById(id)
     }
 
-    suspend fun deletePoint(id: Int) : Response<String>{
+    suspend fun deletePoint(id: Int) : Call<String>{
         return RetrofitInstance.api.deletePoint(id)
     }
 
-    suspend fun updatePoint(id : Int, point : PointUpdate) : Response<String>{
+    suspend fun updatePoint(id : Int, point : PointUpdate) : Call<Point>{
         return RetrofitInstance.api.updatePoint(id, point)
     }
 
