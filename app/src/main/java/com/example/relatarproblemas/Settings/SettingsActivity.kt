@@ -6,10 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import com.example.relatarproblemas.R
-import com.example.relatarproblemas.Retrofit.Type_Point.Type_Point
-import com.example.relatarproblemas.Settings.TypeDataModel.DataModel
 import kotlinx.android.synthetic.main.activity_settings.*
-import kotlinx.android.synthetic.main.fragment_add_notes.*
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -43,7 +40,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun save(){
-        if (distance_edit.text.toString() != "" ){
+        if (distance_edit.text.toString() != "" && geofence_edit.text.toString() != ""){
             val max_range = distance_edit.text.toString().toIntOrNull()
             val notifications = toggle_notifications.isChecked
             val radius = geofence_edit.text.toString().toIntOrNull()

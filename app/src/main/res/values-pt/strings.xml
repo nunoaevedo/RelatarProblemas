@@ -48,4 +48,15 @@
     <string name="enable_notifications_toast">Ative as notificações para poder criar um Perímetro</string>
     <string name="enter_geofence">Entrou no prímetro.</string>
     <string name="exit_geofence">Saiu do perímetro.</string>
+    <string name="unlimited_range">(0 para ilimitado)</string>
+    <string name="max_point_range">Área Máxima (em metros)</string>
+    <string name="create_new_problem">Criar novo problema:</string>
+    <string name="cancel">Cancelar</string>
+    <string name="create">Criar</string>
+    <string name="response_tag">Resposta</string>
+    <string name="problem">Problema</string>
+    <string name="update">Atualizar</string>
+    <string name="successfully_removed">Removido com sucesso.</string>
+    <string name="delete_current_note">Apagar nota atual?</string>
+    <string name="delete_current_note_confirm">Tem a certeza que pretende apagar a nota atual?</string>
 </resources>

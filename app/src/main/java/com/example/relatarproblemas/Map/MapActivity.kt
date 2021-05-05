@@ -138,8 +138,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 //        GET LOGGED USER ID
-        val sharedPref = getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
-        userId = sharedPref.getInt("userId", 0)
+        val sharedPref = getSharedPreferences(getString(R.string.login_key), Context.MODE_PRIVATE)
+        userId = sharedPref.getInt(getString(R.string.user_login_key), 0)
 
         val repository = APIRepository()
         val viewModelFactory = RetrofitViewModelFactory(repository)
@@ -202,17 +202,17 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
         }
 
         val alertDialog = AlertDialog.Builder(this)
-        alertDialog.setTitle("Create new problem:")
+        alertDialog.setTitle(getString(R.string.create_new_problem))
         alertDialog.setView(inflate_view)
         alertDialog.setCancelable(false)
         
-        alertDialog.setNegativeButton("Cancel") { _, _ ->
+        alertDialog.setNegativeButton(getString(R.string.cancel)) { _, _ ->
             Toast.makeText(this, getString(R.string.action_canceled), Toast.LENGTH_SHORT).show()
             viewModel.removeUri()
             viewModel.imageUri.removeObservers(this)
         }
 
-        alertDialog.setPositiveButton("Create", null)
+        alertDialog.setPositiveButton(getString(R.string.create), null)
 
         val dialog = alertDialog.create()
         dialog.show()
@@ -264,8 +264,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
                         }
                     })
                 }else{
-//                    val newPoint = Point(0, comment.toString(), Date(), lastLocation.latitude, lastLocation.longitude, userId, current_type, "")
-
                     val commentBody = comment.toString().toRequestBody("text/plain".toMediaTypeOrNull())
                     val typeBody = current_type.toRequestBody("text/plain".toMediaTypeOrNull())
 
@@ -371,7 +369,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
 
     private fun toSettingsActivity(){
         val intent = Intent(this@MapActivity, SettingsActivity::class.java)
-//        intent.putExtra("types", point_types as Serializable)
         startActivity(intent)
     }
 
@@ -381,8 +378,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
     }
         
     private fun logout(){
-        val sharedPrefEdit = getSharedPreferences("loginInfo", Context.MODE_PRIVATE).edit()
-        sharedPrefEdit.putInt("userId", 0)
+        val sharedPrefEdit = getSharedPreferences(R.string.login_key.toString(), Context.MODE_PRIVATE).edit()
+        sharedPrefEdit.putInt(R.string.user_login_key.toString(), 0)
         sharedPrefEdit.apply()
         toLoginActivity()
     }
@@ -440,7 +437,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
                     }
                 }
             } else {
-                Log.d("Response", response.errorBody().toString())
+                Log.d(getString(R.string.response_tag), response.errorBody().toString())
             }
 
         })
@@ -517,7 +514,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
         }
 
         val alertDialog = AlertDialog.Builder(this)
-        alertDialog.setTitle("Problem:")
+        alertDialog.setTitle(getString(R.string.problem))
         alertDialog.setView(inflate_view)
         alertDialog.setCancelable(true)
 
@@ -526,11 +523,11 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
             type_spinner.isEnabled = false
         }
         else{
-            alertDialog.setNeutralButton("Delete", null)
-            alertDialog.setPositiveButton("Update", null)
+            alertDialog.setNeutralButton(getString(R.string.delete), null)
+            alertDialog.setPositiveButton(getString(R.string.update), null)
         }
 
-        alertDialog.setNegativeButton("Cancel") { _, _ ->
+        alertDialog.setNegativeButton(getString(R.string.cancel)) { _, _ ->
             Toast.makeText(this, getString(R.string.action_canceled), Toast.LENGTH_SHORT).show()
         }
 

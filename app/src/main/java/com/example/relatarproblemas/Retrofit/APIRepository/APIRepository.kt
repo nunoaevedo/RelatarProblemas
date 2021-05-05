@@ -17,7 +17,7 @@ class APIRepository {
         return RetrofitInstance.api.getUser()
     }
 
-    suspend fun login( login : LoginUser) : Response<User> {
+    suspend fun login( login : LoginUser) : Call<User> {
         return RetrofitInstance.api.login(login)
     }
 

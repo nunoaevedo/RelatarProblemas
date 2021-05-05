@@ -36,8 +36,8 @@
     <string name="type_of_problem">Type of problem:</string>
     <string name="distance">Distance:</string>
     <string name="notifications">Notifications</string>
-    <string name="max_point_range" translatable="false">Max Point Range (In Meters)</string>
-    <string name="unlimited_range" translatable="false">(0 for Unlimited)</string>
+    <string name="max_point_range">Max Point Range (In Meters)</string>
+    <string name="unlimited_range">(0 for Unlimited)</string>
     <string name="blocked_road">Blocked Road</string>
     <string name="fallen_tree">Fallen Tree</string>
     <string name="slippery_pavement">Slippery Pavement</string>
@@ -52,9 +52,6 @@
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="enable_notifications_toast">Enable notifications to create a Geofence</string>
-
-<!--  SHARED PREFRENCES KEYS  -->
-
     <string name="settings_key" translatable="false">settings</string>
     <string name="settings_maxRange" translatable="false">maxRange</string>
     <string name="settings_notifications" translatable="false">notifications</string>
@@ -63,8 +60,19 @@
     <string name="geofence_channel_name" translatable="false">geofence_notification</string>
     <string name="broadcast_receiver_tag" translatable="false">BroadcastReceiver</string>
     <string name="enter_geofence">Entered the Geofence</string>
-    <string name="exit_geofence" translatable="false">Exited the Geofence</string>
+    <string name="exit_geofence">Exited the Geofence</string>
     <string name="invalid" translatable="false">Invalid Type</string>
+    <string name="login_key" translatable="false">loginInfo</string>
+    <string name="user_login_key" translatable="false">userId</string>
+    <string name="create_new_problem">Create new problem:</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
+    <string name="response_tag">Response</string>
+    <string name="problem">Problem:</string>
+    <string name="update">Update</string>
+    <string name="successfully_removed">Successfully removed.</string>
+    <string name="delete_current_note">Delete current note?</string>
+    <string name="delete_current_note_confirm">Are you sure you want to delete current note?</string>
 
 
     <string-array name="type_array">

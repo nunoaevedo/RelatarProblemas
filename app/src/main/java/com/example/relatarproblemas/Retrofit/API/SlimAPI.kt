@@ -20,9 +20,9 @@ interface SlimAPI {
     suspend fun getUser(): Response<User>
 
     @POST("login/")
-    suspend fun login(
+    fun login(
             @Body login : LoginUser
-    ): Response<User>
+    ): Call<User>
 
     @GET ("points/")
     suspend fun getPoints(): Response<List<Point>>
