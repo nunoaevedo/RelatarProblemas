@@ -49,6 +49,22 @@
     <string name="cant_update_point">You can\'t update this point!</string>
     <string name="fill_all_fields">Please fill out all fields!</string>
     <string name="username_password_incorrect">Username or password are incorrect</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="enable_notifications_toast">Enable notifications to create a Geofence</string>
+
+<!--  SHARED PREFRENCES KEYS  -->
+
+    <string name="settings_key" translatable="false">settings</string>
+    <string name="settings_maxRange" translatable="false">maxRange</string>
+    <string name="settings_notifications" translatable="false">notifications</string>
+    <string name="settings_geofence" translatable="false">geofence_radius</string>
+    <string name="geofence_channel_id" translatable="false">geofence_transition_id</string>
+    <string name="geofence_channel_name" translatable="false">geofence_notification</string>
+    <string name="broadcast_receiver_tag" translatable="false">BroadcastReceiver</string>
+    <string name="enter_geofence">Entered the Geofence</string>
+    <string name="exit_geofence" translatable="false">Exited the Geofence</string>
+    <string name="invalid" translatable="false">Invalid Type</string>
 
 
     <string-array name="type_array">

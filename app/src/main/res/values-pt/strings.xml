@@ -43,4 +43,9 @@
     <string name="cant_update_point">Não pode atualizar este ponto!</string>
     <string name="fill_all_fields">Preencha todos os campos</string>
     <string name="username_password_incorrect">Utilizador ou senha incorretos.</string>
+    <string name="on">Ativado</string>
+    <string name="off">Desativado</string>
+    <string name="enable_notifications_toast">Ative as notificações para poder criar um Perímetro</string>
+    <string name="enter_geofence">Entrou no prímetro.</string>
+    <string name="exit_geofence">Saiu do perímetro.</string>
 </resources>

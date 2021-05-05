@@ -3,6 +3,7 @@ package com.example.relatarproblemas.Settings
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import com.example.relatarproblemas.R
 import com.example.relatarproblemas.Retrofit.Type_Point.Type_Point
@@ -13,30 +14,81 @@ import kotlinx.android.synthetic.main.fragment_add_notes.*
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var point_types : List<Type_Point>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        save.setOnClickListener {
-//            Toast.makeText(this, distance_edit.text.toString(), Toast.LENGTH_SHORT).show()
-            saveMaxRange()
+        distance_edit.setText(getMaxRange().toString())
+        toggle_notifications.isChecked = getNotifications()
+        geofence_edit.setText(getGeofenceRadius().toString())
+
+        toggle_notifications.setOnCheckedChangeListener { buttonView, isChecked ->
+            geofence_edit.isEnabled = isChecked
         }
+
+        save.setOnClickListener {
+            save()
+        }
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     }
 
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        android.R.id.home -> {
+            finish()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
 
-    fun saveMaxRange(){
-        if (distance_edit.text.toString() != ""){
+    private fun save(){
+        if (distance_edit.text.toString() != "" ){
             val max_range = distance_edit.text.toString().toIntOrNull()
-            val sharedPrefEdit = getSharedPreferences("settings", Context.MODE_PRIVATE).edit()
-            sharedPrefEdit.putInt("maxRange", max_range!!)
-            sharedPrefEdit.apply()
+            val notifications = toggle_notifications.isChecked
+            val radius = geofence_edit.text.toString().toIntOrNull()
+            setMaxRange(max_range!!)
+            setNotifications(notifications)
+            setGeoRadius(radius!!)
             finish()
         }
         else Toast.makeText(this, R.string.fill_all_fields, Toast.LENGTH_SHORT).show()
     }
 
+    private fun getMaxRange() : Int {
+        val sharedPref = getSharedPreferences(getString(R.string.settings_key), Context.MODE_PRIVATE)
+        val maxRange = sharedPref.getInt(getString(R.string.settings_maxRange), 0)
+        return maxRange
+    }
+
+    private fun setMaxRange(maxRange : Int) {
+        val sharedPrefEdit = getSharedPreferences(getString(R.string.settings_key), Context.MODE_PRIVATE).edit()
+        sharedPrefEdit.putInt(getString(R.string.settings_maxRange), maxRange)
+        sharedPrefEdit.apply()
+    }
+
+    private fun getNotifications() : Boolean {
+        val sharedPref = getSharedPreferences(getString(R.string.settings_key), Context.MODE_PRIVATE)
+        val notifications = sharedPref.getBoolean(getString(R.string.settings_notifications), false)
+        return notifications
+    }
+
+    private fun setNotifications(notifications : Boolean) {
+        val sharedPrefEdit = getSharedPreferences(getString(R.string.settings_key), Context.MODE_PRIVATE).edit()
+        sharedPrefEdit.putBoolean(getString(R.string.settings_notifications), notifications)
+        sharedPrefEdit.apply()
+    }
+
+    private fun setGeoRadius(radius : Int) {
+        val sharedPrefEdit = getSharedPreferences(getString(R.string.settings_key), Context.MODE_PRIVATE).edit()
+        sharedPrefEdit.putInt(getString(R.string.settings_geofence), radius)
+        sharedPrefEdit.apply()
+    }
+
+    private fun getGeofenceRadius() : Int {
+        val sharedPref = getSharedPreferences(getString(R.string.settings_key), Context.MODE_PRIVATE)
+        val radius = sharedPref.getInt(getString(R.string.settings_geofence), 100)
+        return radius
+    }
 
 }

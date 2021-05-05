@@ -1,5 +1,7 @@
-    package com.example.relatarproblemas.Map
+package com.example.relatarproblemas.Map
 
+import android.annotation.SuppressLint
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -23,6 +25,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.relatarproblemas.Login.LoginActivity
 import com.example.relatarproblemas.Notes.NotesActivity
@@ -41,16 +44,14 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_map.*
 import kotlinx.android.synthetic.main.create_point.*
 import kotlinx.android.synthetic.main.create_point.view.*
 import kotlinx.android.synthetic.main.create_point.view.problem_description_edit
 import kotlinx.android.synthetic.main.create_point.view.type_spinner
 import kotlinx.android.synthetic.main.point_info.view.*
+import kotlinx.coroutines.launch
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -62,7 +63,7 @@ import java.util.*
 import kotlin.math.max
 
 
-    class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, CompoundButton.OnCheckedChangeListener, SensorEventListener {
+class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, CompoundButton.OnCheckedChangeListener, SensorEventListener, GoogleMap.OnMapLongClickListener {
 
 //    MAP
     private lateinit var mMap: GoogleMap
@@ -92,6 +93,9 @@ import kotlin.math.max
     private lateinit var sensorManager: SensorManager
     private var brightness : Sensor? = null
 
+//    GEOFENCE
+    private var circle: Circle? = null
+    private lateinit var geofencingClient : GeofencingClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,6 +116,8 @@ import kotlin.math.max
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(loc))
             }
         }
+
+        geofencingClient = LocationServices.getGeofencingClient(applicationContext)
 
         createLocationRequest()
 
@@ -315,7 +321,6 @@ import kotlin.math.max
         
     private fun startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)  != PackageManager.PERMISSION_GRANTED){
-
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 101)
             return
         }
@@ -426,7 +431,7 @@ import kotlin.math.max
 
 
         mMap.setOnMarkerClickListener(this)
-
+        mMap.setOnMapLongClickListener(this)
     }
 
     override fun onMarkerClick(p0: Marker?): Boolean {
@@ -600,9 +605,21 @@ import kotlin.math.max
     }
 
     fun getMaxRange() : Int {
-        val sharedPref = getSharedPreferences("settings", Context.MODE_PRIVATE)
-        val maxRange = sharedPref.getInt("maxRange", 0)
+        val sharedPref = getSharedPreferences(getString(R.string.settings_key), Context.MODE_PRIVATE)
+        val maxRange = sharedPref.getInt(getString(R.string.settings_maxRange), 0)
         return maxRange
+    }
+
+    fun getNotifications() : Boolean {
+        val sharedPref = getSharedPreferences(getString(R.string.settings_key), Context.MODE_PRIVATE)
+        val notifications = sharedPref.getBoolean(getString(R.string.settings_notifications), false)
+        return notifications
+    }
+
+    fun getGeofenceRadius() : Int {
+        val sharedPref = getSharedPreferences(getString(R.string.settings_key), Context.MODE_PRIVATE)
+        val radius = sharedPref.getInt(getString(R.string.settings_geofence), 100)
+        return radius
     }
 
     fun updateMap(maxRange : Int) {
@@ -630,6 +647,53 @@ import kotlin.math.max
                 Log.d("Response", response.errorBody().toString())
             }
         })
+    }
+
+    override fun onMapLongClick(p0: LatLng?) {
+        if(getNotifications()){
+            circle?.remove()
+            lifecycleScope.launch {
+                circle = mMap.addCircle(CircleOptions().center(p0).radius(getGeofenceRadius().toDouble())
+                        .strokeColor(R.color.red)
+                        .fillColor(R.color.transparent_red))
+                startGeofence(p0!!.latitude, p0!!.longitude, getGeofenceRadius())
+            }
+        }else{
+            Toast.makeText(this, getString(R.string.enable_notifications_toast), Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    private fun setPendingIntent(geoId : Int) : PendingIntent {
+        val intent = Intent(applicationContext, GeofenceBroadcastReceiver::class.java)
+        return PendingIntent.getBroadcast(
+                applicationContext,
+                geoId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        )
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun startGeofence(latitude : Double, longitude : Double, radius : Int) {
+        val geofence = Geofence.Builder()
+                .setRequestId(1.toString())
+                .setCircularRegion(latitude, longitude, radius.toFloat())
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(
+                        Geofence.GEOFENCE_TRANSITION_ENTER
+                            or Geofence.GEOFENCE_TRANSITION_EXIT
+                )
+                .setLoiteringDelay(5000)
+                .build()
+
+        val geofencingRequest = GeofencingRequest.Builder()
+                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER or GeofencingRequest.INITIAL_TRIGGER_EXIT)
+                .addGeofence(geofence)
+                .build()
+
+        geofencingClient.addGeofences(geofencingRequest, setPendingIntent(1))
+
     }
 
 }
