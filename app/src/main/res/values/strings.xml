@@ -1,18 +1,18 @@
 <resources>
-    <string name="app_name">Relatar Problemas</string>
-    <string name="splash_screen_image">Splash Screen Image</string>
+    <string name="app_name">Problem Solver</string>
+    <string name="splash_screen_image" translatable="false">Splash Screen Image</string>
     <string name="nome_de_utilizador">Username</string>
     <string name="password">Password</string>
     <string name="entrar">Login</string>
     <string name="ver_notas">Notes</string>
     <string name="bem_vindo">Welcome!</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="add_action">Add Action</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="add_action" translatable="false">Add Action</string>
     <string name="save">Save</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
-    <string name="ONE">1</string>
+    <string name="ONE" translatable="false">1</string>
     <string name="delete">Delete</string>
     <string name="title_activity_map">Map</string>
     <string name="delete_everything">Delete everything?</string>
@@ -36,12 +36,19 @@
     <string name="type_of_problem">Type of problem:</string>
     <string name="distance">Distance:</string>
     <string name="notifications">Notifications</string>
-    <string name="max_point_range">Max Point Range (In Meters)</string>
-    <string name="unlimited_range">(0 for Unlimited)</string>
+    <string name="max_point_range" translatable="false">Max Point Range (In Meters)</string>
+    <string name="unlimited_range" translatable="false">(0 for Unlimited)</string>
     <string name="blocked_road">Blocked Road</string>
     <string name="fallen_tree">Fallen Tree</string>
     <string name="slippery_pavement">Slippery Pavement</string>
     <string name="dead_animal">Dead Animal</string>
+    <string name="fill_description">Please fill out description</string>
+    <string name="point_removed">Point removed.</string>
+    <string name="cant_delete_point">You can\'t delete this point!</string>
+    <string name="point_updated">Point Updated</string>
+    <string name="cant_update_point">You can\'t update this point!</string>
+    <string name="fill_all_fields">Please fill out all fields!</string>
+    <string name="username_password_incorrect">Username or password are incorrect</string>
 
 
     <string-array name="type_array">

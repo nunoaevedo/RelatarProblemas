@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
             val password = password_editText.text.toString()
             
             if (username == "" || password == "" ){
-                Toast.makeText(this, "Please fill out all fields!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.fill_all_fields), Toast.LENGTH_SHORT).show()
             }
             else{
 
@@ -56,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
                             toMapActivity()
                         }
                         else {
-                            Toast.makeText(this, "Username or password are incorrect", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, getString(R.string.username_password_incorrect), Toast.LENGTH_SHORT).show()
                         }
                             }
                     else {

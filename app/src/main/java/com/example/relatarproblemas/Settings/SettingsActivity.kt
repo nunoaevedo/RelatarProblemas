@@ -1,10 +1,14 @@
 package com.example.relatarproblemas.Settings
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.relatarproblemas.R
 import com.example.relatarproblemas.Retrofit.Type_Point.Type_Point
 import com.example.relatarproblemas.Settings.TypeDataModel.DataModel
+import kotlinx.android.synthetic.main.activity_settings.*
+import kotlinx.android.synthetic.main.fragment_add_notes.*
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -15,10 +19,23 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-//        point_types = intent.extras?.get("types") as List<Type_Point>
+        save.setOnClickListener {
+//            Toast.makeText(this, distance_edit.text.toString(), Toast.LENGTH_SHORT).show()
+            saveMaxRange()
+        }
 
-//        val dataModel : List<DataModel>
+    }
 
+
+    fun saveMaxRange(){
+        if (distance_edit.text.toString() != ""){
+            val max_range = distance_edit.text.toString().toIntOrNull()
+            val sharedPrefEdit = getSharedPreferences("settings", Context.MODE_PRIVATE).edit()
+            sharedPrefEdit.putInt("maxRange", max_range!!)
+            sharedPrefEdit.apply()
+            finish()
+        }
+        else Toast.makeText(this, R.string.fill_all_fields, Toast.LENGTH_SHORT).show()
     }
 
 
