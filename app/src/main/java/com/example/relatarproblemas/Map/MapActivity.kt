@@ -18,6 +18,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -45,6 +47,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_map.*
 import kotlinx.android.synthetic.main.create_point.*
 import kotlinx.android.synthetic.main.create_point.view.*
@@ -60,7 +63,6 @@ import retrofit2.Call
 import retrofit2.Response
 import java.io.File
 import java.util.*
-import kotlin.math.max
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, CompoundButton.OnCheckedChangeListener, SensorEventListener, GoogleMap.OnMapLongClickListener {
@@ -88,10 +90,20 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
     private val pickImage = 100
 //    private var imageUri: Uri? = null
 
-
 //    LIGHT SENSOR
     private lateinit var sensorManager: SensorManager
+
+//    LIGHT SENSOR
     private var brightness : Sensor? = null
+//    COMPASS SENSOR
+    private var sensorAccelerometer: Sensor? = null
+    private var sensorMagneticField: Sensor? = null
+
+    private var floatGravity = FloatArray(3)
+    private var floatGeoMagnetic = FloatArray(3)
+
+    private val floatOrientation = FloatArray(3)
+    private val floatRotationMatrix = FloatArray(9)
 
 //    GEOFENCE
     private var circle: Circle? = null
@@ -140,13 +152,15 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
         dead_animal_toggle.setOnCheckedChangeListener(this)
         slippery_toggle.setOnCheckedChangeListener(this)
 
-        setUpLightSensor()
+        setUpSensors()
 
     }
 
-    private fun setUpLightSensor() {
+    private fun setUpSensors() {
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         brightness = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+        sensorAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        sensorMagneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
     }
 
     fun createPoint(v: View) {
@@ -311,6 +325,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
         super.onResume()
         startLocationUpdates()
         sensorManager.registerListener(this, brightness, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, sensorMagneticField, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     override fun onRestart() {
@@ -596,7 +612,20 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
             }else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
+        }else if ( event?.sensor?.type == Sensor.TYPE_ACCELEROMETER){
+            floatGravity = event.values;
 
+            SensorManager.getRotationMatrix(floatRotationMatrix, null, floatGravity, floatGeoMagnetic);
+            SensorManager.getOrientation(floatRotationMatrix, floatOrientation);
+
+            compass_view.setRotation((-floatOrientation[0]*180/3.14159).toFloat());
+        }else if ( event?.sensor?.type == Sensor.TYPE_MAGNETIC_FIELD){
+            floatGeoMagnetic = event.values;
+
+            SensorManager.getRotationMatrix(floatRotationMatrix, null, floatGravity, floatGeoMagnetic);
+            SensorManager.getOrientation(floatRotationMatrix, floatOrientation);
+
+            compass_view.setRotation((-floatOrientation[0]*180/3.14159).toFloat());
         }
     }
 
@@ -622,14 +651,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
         return radius
     }
 
-    fun updateMap(maxRange : Int) {
+    fun updateMap(maxRange: Int) {
         mMap.clear()
         viewModel.pointListResponse.observe(this, Observer { response ->
             if (response.isSuccessful) {
                 if (response.body() != null) {
                     response.body()!!.forEach {
                         if ((type_filter.contains(it.type) || type_filter.isEmpty())) {
-                            if (maxRange > calculateDistance(lastLocation.latitude, lastLocation.longitude, it.latitude, it.longitude) || maxRange <= 0){
+                            if (maxRange > calculateDistance(lastLocation.latitude, lastLocation.longitude, it.latitude, it.longitude) || maxRange <= 0) {
                                 val position = LatLng(it.latitude, it.longitude)
                                 if (it.user_id == userId) {
                                     val marker = mMap.addMarker(MarkerOptions().position(position).title(it.comment).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
@@ -664,7 +693,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
 
     }
 
-    private fun setPendingIntent(geoId : Int) : PendingIntent {
+    private fun setPendingIntent(geoId: Int) : PendingIntent {
         val intent = Intent(applicationContext, GeofenceBroadcastReceiver::class.java)
         return PendingIntent.getBroadcast(
                 applicationContext,
@@ -675,14 +704,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerC
     }
 
     @SuppressLint("MissingPermission")
-    private fun startGeofence(latitude : Double, longitude : Double, radius : Int) {
+    private fun startGeofence(latitude: Double, longitude: Double, radius: Int) {
         val geofence = Geofence.Builder()
                 .setRequestId(1.toString())
                 .setCircularRegion(latitude, longitude, radius.toFloat())
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setTransitionTypes(
                         Geofence.GEOFENCE_TRANSITION_ENTER
-                            or Geofence.GEOFENCE_TRANSITION_EXIT
+                                or Geofence.GEOFENCE_TRANSITION_EXIT
                 )
                 .setLoiteringDelay(5000)
                 .build()
